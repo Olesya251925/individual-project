@@ -79,10 +79,16 @@ public static class RoomFactory
 public class HotelBookingSystem
 {
     private Dictionary<int, HotelRoom> bookedRooms;
+    private string selectedCity;
 
     public Dictionary<int, HotelRoom> BookedRooms
     {
         get { return bookedRooms; }
+    }
+
+    public string SelectedCity
+    {
+        get { return selectedCity; }
     }
 
     public HotelBookingSystem()
@@ -100,6 +106,8 @@ public class HotelBookingSystem
         decimal totalPrice = room.GetPrice() * (decimal)(endDate - startDate).TotalDays;
         Console.WriteLine("Итоговая стоимость: ₽" + totalPrice);
 
+        selectedCity = city;
+
         return bookingId;
     }
 
@@ -115,14 +123,18 @@ public class HotelBookingSystem
             Console.WriteLine("Бронирование с указанным ID не найдено.");
         }
     }
+
     private int GenerateBookingId()
     {
         // Генерация случайного ID бронирования
         Random random = new Random();
         return random.Next(1000, 9999);
     }
+}
 
-    static void Main(string[] args)
+public class Program
+{
+    public static void Main(string[] args)
     {
         HotelBookingSystem bookingSystem = new HotelBookingSystem();
 
@@ -136,7 +148,6 @@ public class HotelBookingSystem
         Console.WriteLine("Стандартный номер: для одного человека");
         Console.WriteLine("Люкс: Вид на море");
         Console.WriteLine("Апартаменты: Большие комнаты");
-
 
         // Поиск и бронирование номера
         Console.WriteLine("\nВыберите: Стандартный, Люкс, Апартаменты");
@@ -163,6 +174,9 @@ public class HotelBookingSystem
 
         Console.WriteLine();
 
+        // Вывод выбранного города
+        Console.WriteLine("Выбранный город: " + bookingSystem.SelectedCity);
+
         // Отмена бронирования
         Console.Write("Хотите отменить бронирование? (да/нет): ");
         string cancelBooking = Console.ReadLine();
@@ -173,11 +187,9 @@ public class HotelBookingSystem
             int cancelBookingId = int.Parse(Console.ReadLine());
             bookingSystem.CancelBooking(cancelBookingId);
         }
-        if (cancelBooking.ToLower() == "нет")
+        else if (cancelBooking.ToLower() == "нет")
         {
-            Console.Write("Ждем вас в забронированном номере! Приятного отдыха!");
-            int cancelBookingId = int.Parse(Console.ReadLine());
-
+            Console.WriteLine("Ждем вас в забронированном номере! Приятного отдыха!");
         }
 
         Console.ReadKey();
